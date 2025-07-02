@@ -1,0 +1,187 @@
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import io from 'socket.io-client';
+import { toast } from 'react-toastify';
+
+const SocketContext = createContext();
+
+export const useSocket = () => {
+  const context = useContext(SocketContext);
+  if (!context) {
+    throw new Error('useSocket must be used within a SocketProvider');
+  }
+  return context;
+};
+
+export const SocketProvider = ({ children }) => {
+  const [socket, setSocket] = useState(null);
+  const [connected, setConnected] = useState(false);
+  const [roomState, setRoomState] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    // Initialize socket connection
+    const newSocket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:5000', {
+      transports: ['websocket', 'polling']
+    });
+
+    setSocket(newSocket);
+
+    // Connection event handlers
+    newSocket.on('connect', () => {
+      console.log('Connected to server');
+      setConnected(true);
+      toast.success('Connected to server');
+    });
+
+    newSocket.on('disconnect', () => {
+      console.log('Disconnected from server');
+      setConnected(false);
+      toast.error('Disconnected from server');
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('Connection error:', error);
+      toast.error('Failed to connect to server');
+    });
+
+    // Room event handlers
+    newSocket.on('room-created', (data) => {
+      console.log('Room created:', data);
+      setRoomState(data.room);
+      toast.success(`Room created: ${data.roomId}`);
+    });
+
+    newSocket.on('room-joined', (data) => {
+      console.log('Room joined:', data);
+      setRoomState(data.room);
+      toast.success('Joined room successfully');
+    });
+
+    newSocket.on('room-state', (data) => {
+      console.log('Room state updated:', data);
+      setRoomState(data.room);
+    });
+
+    newSocket.on('team-added', (data) => {
+      console.log('Team added:', data);
+      setRoomState(data.room);
+      toast.success(`Team "${data.teamData.name}" added`);
+    });
+
+    newSocket.on('auction-started', (data) => {
+      console.log('Auction started:', data);
+      setRoomState(data.room);
+      toast.success('Auction has started!');
+    });
+
+    newSocket.on('bid-placed', (data) => {
+      console.log('Bid placed:', data);
+      setRoomState(data.room);
+    });
+
+    newSocket.on('next-player', (data) => {
+      console.log('Next player:', data);
+      setRoomState(data.room);
+    });
+
+    newSocket.on('player-added', (data) => {
+      console.log('Custom player added:', data);
+      toast.success(`Player "${data.player.name}" added`);
+    });
+
+    newSocket.on('user-joined', (data) => {
+      console.log('User joined:', data);
+      toast.info(`User ${data.userId} joined the room`);
+    });
+
+    // Error handler
+    newSocket.on('error', (data) => {
+      console.error('Socket error:', data);
+      toast.error(data.message || 'An error occurred');
+    });
+
+    // Cleanup on unmount
+    return () => {
+      newSocket.close();
+    };
+  }, []);
+
+  // Socket methods
+  const registerUser = (userId) => {
+    if (socket) {
+      socket.emit('register', userId);
+      setCurrentUser(userId);
+    }
+  };
+
+  const createRoom = (settings) => {
+    if (socket) {
+      socket.emit('create-room', { settings });
+    }
+  };
+
+  const joinRoom = (roomId) => {
+    if (socket) {
+      socket.emit('join-room', { roomId });
+    }
+  };
+
+  const addTeam = (roomId, teamData) => {
+    if (socket) {
+      socket.emit('add-team', { roomId, teamData });
+    }
+  };
+
+  const startAuction = (roomId) => {
+    if (socket) {
+      socket.emit('start-auction', { roomId });
+    }
+  };
+
+  const placeBid = (roomId, teamId, amount) => {
+    if (socket) {
+      socket.emit('place-bid', { roomId, teamId, amount });
+    }
+  };
+
+  const nextPlayer = (roomId) => {
+    if (socket) {
+      socket.emit('next-player', { roomId });
+    }
+  };
+
+  const addCustomPlayer = (roomId, playerData) => {
+    if (socket) {
+      socket.emit('add-custom-player', { roomId, playerData });
+    }
+  };
+
+  const getRoomState = (roomId) => {
+    if (socket) {
+      socket.emit('get-room-state', { roomId });
+    }
+  };
+
+  const value = {
+    socket,
+    connected,
+    roomState,
+    currentUser,
+    registerUser,
+    createRoom,
+    joinRoom,
+    addTeam,
+    startAuction,
+    placeBid,
+    nextPlayer,
+    addCustomPlayer,
+    getRoomState,
+    setRoomState
+  };
+
+  return (
+    <SocketContext.Provider value={value}>
+      {children}
+    </SocketContext.Provider>
+  );
+};
