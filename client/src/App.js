@@ -28,6 +28,8 @@ function App() {
               <Route path="/room/:roomId" element={<AuctionRoom />} />
               <Route path="/teams" element={<TeamManagement />} />
               <Route path="/simulation" element={<Simulation />} />
+              <Route path="/tournaments" element={<TournamentHub />} />
+              <Route path="/create-tournament" element={<CreateTournament />} />
             </Routes>
           </main>
           
