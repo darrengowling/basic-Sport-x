@@ -37,6 +37,11 @@ const CreateTournament = () => {
       wicketKeepers: 1,
       totalPlayers: 11
     },
+    auctionSettings: {
+      bidIncrement: 50000, // £50k
+      bidTimeout: 30, // 30 seconds
+      minimumBid: 100000 // £100k
+    },
     auctionDate: '',
     tournamentStart: '',
     tournamentEnd: '',
