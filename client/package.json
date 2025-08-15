@@ -1,7 +1,7 @@
 {
-  "name": "cricket-auction-frontend",
+  "name": "sport-x-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Cricket Auction App",
+  "description": "Frontend for Sport X - Cricket Auction Platform",
   "private": true,
   "dependencies": {
     "@tailwindcss/forms": "^0.5.10",

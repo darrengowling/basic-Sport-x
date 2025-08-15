@@ -1,4 +1,4 @@
-# 🏏 Cricket Auction App
+# 🏆 Sport X - Cricket Auction Platform
 
 > A full-stack real-time cricket auction simulation with AI-powered match predictions
 
@@ -63,8 +63,8 @@
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/your-username/cricket-auction-app.git
-cd cricket-auction-app
+git clone https://github.com/your-username/sport-x-cricket-auction.git
+cd sport-x-cricket-auction
 ```
 
 ### 2. Setup Backend
@@ -105,7 +105,7 @@ GEMINI_API_KEY=your_actual_api_key_here
 
 ### Project Structure
 ```
-cricket-auction-app/
+sport-x-cricket-auction/
 ├── client/                 # React frontend
 │   ├── src/components/    # Reusable components
 │   ├── src/pages/         # Main pages
@@ -134,4 +134,4 @@ MIT License - see LICENSE file for details.
 
 **⭐ Star this repo if you found it helpful!**
 
-Built with ❤️ for cricket enthusiasts worldwide 🏏
+Built with ❤️ by Sport X for cricket enthusiasts worldwide 🏏

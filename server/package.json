@@ -1,7 +1,7 @@
 {
-  "name": "cricket-auction-backend",
+  "name": "sport-x-backend",
   "version": "1.0.0",
-  "description": "Backend for Cricket Auction App",
+  "description": "Backend for Sport X - Cricket Auction Platform",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -20,11 +20,12 @@
     "nodemon": "^3.0.1"
   },
   "keywords": [
+    "sport-x",
     "cricket",
     "auction",
     "websocket",
     "realtime"
   ],
-  "author": "Your Name",
+  "author": "Sport X",
   "license": "MIT"
 }

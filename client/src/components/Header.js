@@ -18,7 +18,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 text-xl font-bold text-blue-600 dark:text-blue-400">
             <Trophy className="w-6 h-6" />
-            <span>Cricket Auction</span>
+            <span>Sport X</span>
           </Link>
 
           {/* Navigation */}
