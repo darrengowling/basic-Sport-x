@@ -337,6 +337,123 @@ io.on('connection', (socket) => {
     socket.emit('room-state', { room: room.getState() });
   });
 
+  // ======================= TOURNAMENT EVENTS =======================
+  
+  // Create tournament
+  socket.on('create-tournament', (data) => {
+    try {
+      const tournament = new Tournament(socket.userId, data.settings);
+      tournaments.set(tournament.id, tournament);
+      performanceTracker.registerTournament(tournament);
+      
+      socket.join(`tournament-${tournament.id}`);
+      socket.emit('tournament-created', { tournament: tournament.getState() });
+      
+      console.log(`Tournament created: ${tournament.id} by ${socket.userId}`);
+    } catch (error) {
+      socket.emit('error', { message: error.message });
+    }
+  });
+
+  // Join tournament
+  socket.on('join-tournament', (data) => {
+    const { tournamentId, userData } = data;
+    const tournament = tournaments.get(tournamentId);
+    
+    if (!tournament) {
+      socket.emit('error', { message: 'Tournament not found' });
+      return;
+    }
+
+    try {
+      if (!tournament.canUserJoin(socket.userId)) {
+        socket.emit('error', { message: 'Cannot join this tournament' });
+        return;
+      }
+
+      const participant = tournament.addParticipant(socket.userId, userData);
+      socket.join(`tournament-${tournamentId}`);
+      
+      // Notify all tournament participants
+      io.to(`tournament-${tournamentId}`).emit('tournament-updated', { 
+        tournament: tournament.getState(),
+        event: 'participant-joined',
+        participant: participant
+      });
+      
+      // Send system message
+      const systemMsg = tournament.addSystemMessage(`${userData.username} joined the tournament`);
+      io.to(`tournament-${tournamentId}`).emit('chat-message', systemMsg);
+      
+    } catch (error) {
+      socket.emit('error', { message: error.message });
+    }
+  });
+
+  // Tournament chat
+  socket.on('tournament-chat', (data) => {
+    const { tournamentId, message } = data;
+    const tournament = tournaments.get(tournamentId);
+    
+    if (!tournament || !tournament.participants.has(socket.userId)) {
+      socket.emit('error', { message: 'Not authorized to chat in this tournament' });
+      return;
+    }
+
+    const chatMessage = tournament.addChatMessage(socket.userId, message);
+    io.to(`tournament-${tournamentId}`).emit('chat-message', chatMessage);
+  });
+
+  // Start tournament auction
+  socket.on('start-tournament-auction', (data) => {
+    const { tournamentId } = data;
+    const tournament = tournaments.get(tournamentId);
+    
+    if (!tournament || tournament.adminId !== socket.userId) {
+      socket.emit('error', { message: 'Not authorized to start auction' });
+      return;
+    }
+
+    tournament.status = 'auction_active';
+    io.to(`tournament-${tournamentId}`).emit('tournament-updated', { 
+      tournament: tournament.getState(),
+      event: 'auction-started'
+    });
+
+    const systemMsg = tournament.addSystemMessage('Tournament auction has started!');
+    io.to(`tournament-${tournamentId}`).emit('chat-message', systemMsg);
+  });
+
+  // Mark entry fee paid
+  socket.on('mark-entry-fee-paid', (data) => {
+    const { tournamentId, userId } = data;
+    const tournament = tournaments.get(tournamentId);
+    
+    if (!tournament || tournament.adminId !== socket.userId) {
+      socket.emit('error', { message: 'Not authorized' });
+      return;
+    }
+
+    tournament.markEntryFeePaid(userId);
+    io.to(`tournament-${tournamentId}`).emit('tournament-updated', { 
+      tournament: tournament.getState(),
+      event: 'entry-fee-paid'
+    });
+  });
+
+  // Get tournament state  
+  socket.on('get-tournament-state', (data) => {
+    const { tournamentId } = data;
+    const tournament = tournaments.get(tournamentId);
+    
+    if (!tournament) {
+      socket.emit('error', { message: 'Tournament not found' });
+      return;
+    }
+
+    socket.emit('tournament-state', { tournament: tournament.getState() });
+  });
+
   // Disconnect
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
