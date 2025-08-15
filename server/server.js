@@ -463,6 +463,139 @@ io.on('connection', (socket) => {
   });
 });
 
+// ======================= TOURNAMENT API ENDPOINTS =======================
+
+// Get all tournaments
+app.get('/api/tournaments', (req, res) => {
+  const tournamentList = Array.from(tournaments.values()).map(t => ({
+    id: t.id,
+    name: t.settings.name,
+    realTournament: t.settings.realTournament,
+    entryFee: t.settings.entryFee,
+    prizePool: t.prizePool,
+    participants: t.participants.size,
+    maxParticipants: t.settings.maxParticipants,
+    status: t.status,
+    createdAt: t.createdAt
+  }));
+  res.json(tournamentList);
+});
+
+// Get tournament details
+app.get('/api/tournaments/:id', (req, res) => {
+  const tournament = tournaments.get(req.params.id);
+  if (!tournament) {
+    return res.status(404).json({ error: 'Tournament not found' });
+  }
+  res.json(tournament.getState());
+});
+
+// Create tournament
+app.post('/api/tournaments', (req, res) => {
+  try {
+    const { adminId, settings } = req.body;
+    const tournament = new Tournament(adminId, settings);
+    tournaments.set(tournament.id, tournament);
+    performanceTracker.registerTournament(tournament);
+    res.json({ 
+      success: true, 
+      tournament: tournament.getState(),
+      message: 'Tournament created successfully'
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Join tournament
+app.post('/api/tournaments/:id/join', (req, res) => {
+  const tournament = tournaments.get(req.params.id);
+  if (!tournament) {
+    return res.status(404).json({ error: 'Tournament not found' });
+  }
+
+  try {
+    const { userId, userData } = req.body;
+    if (!tournament.canUserJoin(userId)) {
+      return res.status(400).json({ error: 'Cannot join this tournament' });
+    }
+
+    const participant = tournament.addParticipant(userId, userData);
+    res.json({ 
+      success: true,
+      participant,
+      tournament: tournament.getState()
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Update player performance (admin only)
+app.post('/api/tournaments/:id/performance', (req, res) => {
+  const tournament = tournaments.get(req.params.id);
+  if (!tournament) {
+    return res.status(404).json({ error: 'Tournament not found' });
+  }
+
+  const { playerId, performance, adminId } = req.body;
+  if (tournament.adminId !== adminId) {
+    return res.status(403).json({ error: 'Not authorized' });
+  }
+
+  tournament.updatePlayerPerformance(playerId, performance);
+  res.json({ 
+    success: true,
+    leaderboard: tournament.leaderboard
+  });
+});
+
+// Get tournament leaderboard
+app.get('/api/tournaments/:id/leaderboard', (req, res) => {
+  const tournament = tournaments.get(req.params.id);
+  if (!tournament) {
+    return res.status(404).json({ error: 'Tournament not found' });
+  }
+  res.json(tournament.leaderboard);
+});
+
+// Get tournament chat messages
+app.get('/api/tournaments/:id/chat', (req, res) => {
+  const tournament = tournaments.get(req.params.id);
+  if (!tournament) {
+    return res.status(404).json({ error: 'Tournament not found' });
+  }
+  res.json(tournament.chatMessages);
+});
+
+// Real-time performance update endpoint (for external integrations)
+app.post('/api/performance/update', (req, res) => {
+  const { tournamentId, playerId, performance } = req.body;
+  
+  const success = performanceTracker.updatePlayerPerformance(tournamentId, playerId, performance);
+  
+  if (success) {
+    res.json({ success: true, message: 'Performance updated' });
+  } else {
+    res.status(404).json({ error: 'Tournament not found' });
+  }
+});
+
+// Get available real-life tournaments (for selection)
+app.get('/api/real-tournaments', (req, res) => {
+  const realTournaments = [
+    { id: 'ipl-2024', name: 'Indian Premier League 2024', type: 'T20' },
+    { id: 'world-cup-2024', name: 'ICC T20 World Cup 2024', type: 'T20' },
+    { id: 'the-hundred-2024', name: 'The Hundred 2024', type: 'The Hundred' },
+    { id: 'cpl-2024', name: 'Caribbean Premier League 2024', type: 'T20' },
+    { id: 'bbl-2024', name: 'Big Bash League 2024', type: 'T20' },
+    { id: 'psl-2024', name: 'Pakistan Super League 2024', type: 'T20' },
+    { id: 'eng-vs-ind-2024', name: 'England vs India Test Series 2024', type: 'Test' },
+    { id: 'aus-vs-sa-2024', name: 'Australia vs South Africa ODI Series 2024', type: 'ODI' }
+  ];
+  res.json(realTournaments);
+});
+
 // AI Prediction endpoint
 app.post('/api/predict', async (req, res) => {
   try {
