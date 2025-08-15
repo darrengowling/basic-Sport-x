@@ -78,7 +78,7 @@ const TournamentHub = () => {
               <Trophy className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Fantasy Cricket Tournaments
+              Cricket Tournaments
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
               Create and join fantasy cricket tournaments based on real matches. 
