@@ -21,7 +21,11 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     // Initialize socket connection
     const newSocket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:5000', {
-      transports: ['websocket', 'polling']
+      transports: ['websocket', 'polling'],
+      forceNew: true,
+      reconnection: true,
+      timeout: 5000,
+      upgrade: true
     });
 
     setSocket(newSocket);
