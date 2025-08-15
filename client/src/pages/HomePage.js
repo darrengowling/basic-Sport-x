@@ -117,6 +117,18 @@ const HomePage = () => {
                 <span>Quick Auction</span>
               </Link>
             </div>
+
+            {/* Testing Guide Banner */}
+            <div className="mt-8">
+              <Link
+                to="/testing-guide"
+                className="inline-flex items-center space-x-2 bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900 dark:hover:bg-yellow-800 text-yellow-800 dark:text-yellow-200 px-6 py-3 rounded-lg font-medium transition-colors"
+              >
+                <span>🧪</span>
+                <span>New to Sport X? Check out our Testing Guide</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
