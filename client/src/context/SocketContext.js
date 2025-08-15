@@ -52,7 +52,8 @@ export const SocketProvider = ({ children }) => {
 
     newSocket.on('connect_error', (error) => {
       console.error('Connection error:', error);
-      toast.error('Failed to connect to server');
+      setConnected(false);
+      toast.error('Failed to connect to server - Real-time features disabled');
     });
 
     // Room event handlers
