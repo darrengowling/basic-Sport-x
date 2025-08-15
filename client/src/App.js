@@ -8,6 +8,8 @@ import CreateRoom from './pages/CreateRoom';
 import JoinRoom from './pages/JoinRoom';
 import TeamManagement from './pages/TeamManagement';
 import Simulation from './pages/Simulation';
+import TournamentHub from './pages/TournamentHub';
+import CreateTournament from './pages/CreateTournament';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
