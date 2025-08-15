@@ -124,7 +124,7 @@ const TournamentHub = () => {
                 No tournaments yet
               </h3>
               <p className="text-gray-500 dark:text-gray-500 mb-6">
-                Be the first to create a fantasy cricket tournament!
+                Be the first to create a cricket tournament!
               </p>
               <Link
                 to="/create-tournament"
