@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import PlayerSelection from '../components/PlayerSelection';
 import { 
   Trophy, 
   Calendar, 
@@ -10,7 +11,9 @@ import {
   DollarSign,
   Settings,
   ArrowRight,
-  Info
+  Info,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 const CreateTournament = () => {
