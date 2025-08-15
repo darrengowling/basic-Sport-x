@@ -129,7 +129,7 @@ const CreateTournament = () => {
               <Trophy className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              Create Fantasy Tournament
+              Create Tournament
             </h1>
             <p className="text-gray-600 dark:text-gray-300">
               Set up a new fantasy cricket tournament for your community
