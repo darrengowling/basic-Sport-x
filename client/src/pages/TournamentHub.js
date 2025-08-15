@@ -216,7 +216,7 @@ const TournamentHub = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              How Fantasy Tournaments Work
+              How Cricket Tournaments Work
             </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Join the excitement of fantasy cricket with real money prizes and community competition
