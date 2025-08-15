@@ -203,6 +203,167 @@ class SportXAPITester:
         self.log_test("Player Data Structure Validation", success, details)
         return success
 
+    def test_tournaments_endpoint(self):
+        """Test /api/tournaments endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments")
+            success = response.status_code == 200
+            
+            if success:
+                tournaments = response.json()
+                is_array = isinstance(tournaments, list)
+                details = f"Returned {len(tournaments)} tournaments, Is array: {is_array}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Tournaments API Endpoint", success, details)
+            return success, tournaments if success else []
+            
+        except Exception as e:
+            self.log_test("Tournaments API Endpoint", False, str(e))
+            return False, []
+
+    def test_real_tournaments_endpoint(self):
+        """Test /api/real-tournaments endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/real-tournaments")
+            success = response.status_code == 200
+            
+            if success:
+                real_tournaments = response.json()
+                is_array = isinstance(real_tournaments, list)
+                has_required_fields = all(
+                    'id' in t and 'name' in t and 'type' in t 
+                    for t in real_tournaments[:3]  # Check first 3
+                )
+                details = f"Found {len(real_tournaments)} real tournaments, Required fields: {has_required_fields}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Real Tournaments API Endpoint", success, details)
+            return success, real_tournaments if success else []
+            
+        except Exception as e:
+            self.log_test("Real Tournaments API Endpoint", False, str(e))
+            return False, []
+
+    def test_create_tournament(self):
+        """Test tournament creation"""
+        try:
+            tournament_data = {
+                "adminId": f"test_admin_{int(time.time())}",
+                "settings": {
+                    "name": "Test Fantasy Tournament",
+                    "realTournament": "ipl-2024",
+                    "entryFee": 5,
+                    "maxParticipants": 10,
+                    "budget": 50000000,
+                    "squadRules": {
+                        "batsmen": 4,
+                        "bowlers": 4,
+                        "allRounders": 2,
+                        "wicketKeepers": 1
+                    },
+                    "startDate": "2024-08-20",
+                    "endDate": "2024-09-20"
+                }
+            }
+            
+            response = self.session.post(f"{self.base_url}/api/tournaments", json=tournament_data)
+            success = response.status_code == 200
+            
+            if success:
+                result = response.json()
+                has_tournament = 'tournament' in result and 'success' in result
+                tournament_id = result.get('tournament', {}).get('id')
+                details = f"Tournament created: {has_tournament}, ID: {tournament_id}"
+                return success, tournament_id
+            else:
+                details = f"HTTP {response.status_code}"
+                self.log_test("Create Tournament", success, details)
+                return False, None
+                
+            self.log_test("Create Tournament", success, details)
+            return success, tournament_id if success else None
+            
+        except Exception as e:
+            self.log_test("Create Tournament", False, str(e))
+            return False, None
+
+    def test_get_tournament_details(self, tournament_id):
+        """Test getting tournament details"""
+        if not tournament_id:
+            self.log_test("Get Tournament Details", False, "No tournament ID provided")
+            return False
+            
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments/{tournament_id}")
+            success = response.status_code == 200
+            
+            if success:
+                tournament = response.json()
+                has_required_fields = all(
+                    field in tournament for field in ['id', 'settings', 'status', 'participants']
+                )
+                details = f"Tournament details retrieved, Required fields: {has_required_fields}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Get Tournament Details", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Get Tournament Details", False, str(e))
+            return False
+
+    def test_tournament_leaderboard(self, tournament_id):
+        """Test tournament leaderboard endpoint"""
+        if not tournament_id:
+            self.log_test("Tournament Leaderboard", False, "No tournament ID provided")
+            return False
+            
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments/{tournament_id}/leaderboard")
+            success = response.status_code == 200
+            
+            if success:
+                leaderboard = response.json()
+                is_array = isinstance(leaderboard, list)
+                details = f"Leaderboard retrieved, Is array: {is_array}, Entries: {len(leaderboard)}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Tournament Leaderboard", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Tournament Leaderboard", False, str(e))
+            return False
+
+    def test_tournament_chat(self, tournament_id):
+        """Test tournament chat endpoint"""
+        if not tournament_id:
+            self.log_test("Tournament Chat", False, "No tournament ID provided")
+            return False
+            
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments/{tournament_id}/chat")
+            success = response.status_code == 200
+            
+            if success:
+                chat_messages = response.json()
+                is_array = isinstance(chat_messages, list)
+                details = f"Chat messages retrieved, Is array: {is_array}, Messages: {len(chat_messages)}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Tournament Chat", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Tournament Chat", False, str(e))
+            return False
+
     def run_all_tests(self):
         """Run all backend tests"""
         print("🏏 Starting Sport X Backend API Tests")
