@@ -36,8 +36,12 @@ const CreateTournament = () => {
     },
     auctionDate: '',
     tournamentStart: '',
-    tournamentEnd: ''
+    tournamentEnd: '',
+    selectedPlayers: []
   });
+
+  const [currentStep, setCurrentStep] = useState(1);
+  const totalSteps = 4;
 
   useEffect(() => {
     fetchRealTournaments();
