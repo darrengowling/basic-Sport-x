@@ -81,7 +81,7 @@ const TournamentHub = () => {
               Cricket Tournaments
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              Create and join fantasy cricket tournaments based on real matches. 
+              Create and join cricket tournaments based on real matches. 
               Compete with friends, win prizes, and prove your cricket knowledge!
             </p>
             
