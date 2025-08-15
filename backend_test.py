@@ -374,7 +374,7 @@ class SportXAPITester:
             print("❌ Server is not responding. Stopping tests.")
             return False
             
-        # Test all endpoints
+        # Test original auction endpoints
         players_success, players_data = self.test_players_endpoint()
         
         if players_success and players_data:
@@ -384,6 +384,20 @@ class SportXAPITester:
         self.test_tournament_simulation_endpoint()
         self.test_room_endpoint_404()
         self.test_cors_headers()
+        
+        # Test new tournament endpoints
+        print("\n🏆 Testing Tournament Features")
+        print("-" * 30)
+        
+        tournaments_success, tournaments_data = self.test_tournaments_endpoint()
+        real_tournaments_success, real_tournaments_data = self.test_real_tournaments_endpoint()
+        
+        # Test tournament creation and related endpoints
+        tournament_created, tournament_id = self.test_create_tournament()
+        if tournament_created and tournament_id:
+            self.test_get_tournament_details(tournament_id)
+            self.test_tournament_leaderboard(tournament_id)
+            self.test_tournament_chat(tournament_id)
         
         # Print summary
         print("\n" + "=" * 50)
