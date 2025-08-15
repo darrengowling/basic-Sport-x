@@ -31,7 +31,7 @@ const CreateRoom = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-4">
       <div className="max-w-lg w-full">
-        <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Create Auction Room</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Create Sport X Auction Room</h2>
         <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-lg shadow-md">
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Room Name</label>
@@ -78,4 +78,3 @@ const CreateRoom = () => {
 };
 
 export default CreateRoom;
-

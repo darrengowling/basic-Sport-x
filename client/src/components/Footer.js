@@ -14,7 +14,7 @@ const Footer = () => {
           
           <div className="flex items-center space-x-4 mt-4 md:mt-0">
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              © 2024 Cricket Auction App
+              © 2024 Sport X
             </div>
             <a
               href="https://github.com"
@@ -28,7 +28,7 @@ const Footer = () => {
         </div>
         
         <div className="mt-4 text-center text-sm text-gray-500 dark:text-gray-500">
-          Real-time cricket auction experience with AI-powered predictions
+          The ultimate cricket auction platform with AI-powered predictions
         </div>
       </div>
     </footer>
