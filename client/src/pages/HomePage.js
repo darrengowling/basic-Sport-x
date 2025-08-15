@@ -106,7 +106,7 @@ const HomePage = () => {
                 className="btn-primary px-8 py-4 text-lg flex items-center space-x-2 hover:scale-105 transform transition-transform"
               >
                 <Trophy className="w-5 h-5" />
-                <span>Fantasy Tournaments</span>
+                <span>Tournaments</span>
               </Link>
               
               <Link
