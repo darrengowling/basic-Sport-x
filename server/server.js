@@ -7,6 +7,10 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
 
+// Import new models
+const Tournament = require('./models/Tournament');
+const PerformanceTracker = require('./models/PerformanceTracker');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -25,9 +29,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// In-memory storage for auction rooms
+// In-memory storage
 const auctionRooms = new Map();
+const tournaments = new Map(); // New: Tournament storage
 const userSockets = new Map();
+
+// Initialize performance tracker
+const performanceTracker = new PerformanceTracker();
 
 // Load players data
 const playersData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/players.json'), 'utf8'));
