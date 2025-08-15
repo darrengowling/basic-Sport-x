@@ -447,6 +447,69 @@ const CreateTournament = () => {
                     </div>
                   </div>
 
+                  {/* Auction Settings */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      Auction Rules
+                    </h3>
+                    
+                    <div className="grid md:grid-cols-3 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Bid Increment (£)
+                        </label>
+                        <input
+                          type="number"
+                          name="auctionSettings.bidIncrement"
+                          value={formData.auctionSettings.bidIncrement}
+                          onChange={handleInputChange}
+                          min="10000"
+                          step="10000"
+                          className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                        />
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Minimum amount to increase bid by
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Bid Timer (seconds)
+                        </label>
+                        <input
+                          type="number"
+                          name="auctionSettings.bidTimeout"
+                          value={formData.auctionSettings.bidTimeout}
+                          onChange={handleInputChange}
+                          min="10"
+                          max="120"
+                          className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                        />
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Time limit for each player auction
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Minimum Bid (£)
+                        </label>
+                        <input
+                          type="number"
+                          name="auctionSettings.minimumBid"
+                          value={formData.auctionSettings.minimumBid}
+                          onChange={handleInputChange}
+                          min="50000"
+                          step="50000"
+                          className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white"
+                        />
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          Starting bid for all players
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Tournament Dates */}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center space-x-2">
