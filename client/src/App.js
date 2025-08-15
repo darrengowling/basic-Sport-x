@@ -10,6 +10,7 @@ import TeamManagement from './pages/TeamManagement';
 import Simulation from './pages/Simulation';
 import TournamentHub from './pages/TournamentHub';
 import CreateTournament from './pages/CreateTournament';
+import TestingGuide from './pages/TestingGuide';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
