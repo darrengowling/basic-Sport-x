@@ -132,7 +132,7 @@ const CreateTournament = () => {
               Create Tournament
             </h1>
             <p className="text-gray-600 dark:text-gray-300">
-              Set up a new fantasy cricket tournament for your community
+              Set up a new cricket tournament for your community
             </p>
           </div>
 
