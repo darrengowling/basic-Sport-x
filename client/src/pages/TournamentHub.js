@@ -219,7 +219,7 @@ const TournamentHub = () => {
               How Cricket Tournaments Work
             </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Join the excitement of fantasy cricket with real money prizes and community competition
+              Join the excitement of cricket tournaments with real money prizes and community competition
             </p>
           </motion.div>
 
