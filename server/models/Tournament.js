@@ -18,6 +18,11 @@ class Tournament {
         wicketKeepers: settings.squadRules?.wicketKeepers || 1,
         totalPlayers: settings.squadRules?.totalPlayers || 11
       },
+      auctionSettings: {
+        bidIncrement: settings.auctionSettings?.bidIncrement || 50000, // £50k default
+        bidTimeout: settings.auctionSettings?.bidTimeout || 30, // 30 seconds default
+        minimumBid: settings.auctionSettings?.minimumBid || 100000 // £100k minimum
+      },
       auctionDate: settings.auctionDate,
       tournamentStart: settings.tournamentStart,
       tournamentEnd: settings.tournamentEnd
