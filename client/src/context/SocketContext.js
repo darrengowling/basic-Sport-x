@@ -20,12 +20,19 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Initialize socket connection
-    const newSocket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:5000', {
-      transports: ['websocket', 'polling'],
+    const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+    console.log('Connecting to Socket.io server:', serverUrl);
+    
+    const newSocket = io(serverUrl, {
+      transports: ['polling', 'websocket'], // Try polling first, then upgrade to websocket
+      upgrade: true,
+      rememberUpgrade: false,
       forceNew: true,
       reconnection: true,
-      timeout: 5000,
-      upgrade: true
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 10000,
+      autoConnect: true
     });
 
     setSocket(newSocket);
