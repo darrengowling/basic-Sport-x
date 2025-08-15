@@ -93,10 +93,10 @@ const HomePage = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6">
-              Cricket <span className="text-blue-600 dark:text-blue-400">Auction</span>
+              <span className="text-blue-600 dark:text-blue-400">Sport X</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              Experience the thrill of cricket auctions with real-time bidding, AI predictions, 
+              The ultimate cricket auction platform with real-time bidding, AI predictions, 
               and multiplayer support
             </p>
             
@@ -131,7 +131,7 @@ const HomePage = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Why Choose Our Platform?
+              Why Choose Sport X?
             </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Built for cricket enthusiasts with modern technology and intuitive design
@@ -175,7 +175,7 @@ const HomePage = () => {
               Choose Your Auction Mode
             </h2>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Select the perfect mode for your team-building experience
+              Select the perfect mode for your cricket team-building experience
             </p>
           </motion.div>
 
@@ -275,10 +275,10 @@ const HomePage = () => {
             className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-white"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Start Your Auction?
+              Ready to Start Your Cricket Auction?
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              Create your team, make strategic bids, and compete with friends
+              Build your dream cricket team with Sport X's advanced auction platform
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
