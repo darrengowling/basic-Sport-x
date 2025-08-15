@@ -102,19 +102,19 @@ const HomePage = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
-                to="/create-room"
+                to="/tournaments"
                 className="btn-primary px-8 py-4 text-lg flex items-center space-x-2 hover:scale-105 transform transition-transform"
               >
-                <Play className="w-5 h-5" />
-                <span>Start Auction</span>
+                <Trophy className="w-5 h-5" />
+                <span>Fantasy Tournaments</span>
               </Link>
               
               <Link
-                to="/join-room"
+                to="/create-room"
                 className="btn-secondary px-8 py-4 text-lg flex items-center space-x-2 hover:scale-105 transform transition-transform"
               >
-                <Plus className="w-5 h-5" />
-                <span>Join Room</span>
+                <Play className="w-5 h-5" />
+                <span>Quick Auction</span>
               </Link>
             </div>
           </motion.div>
