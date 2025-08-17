@@ -33,6 +33,8 @@ function App() {
               <Route path="/simulation" element={<Simulation />} />
               <Route path="/tournaments" element={<TournamentHub />} />
               <Route path="/create-tournament" element={<CreateTournament />} />
+              <Route path="/kabaddi-hub" element={<KabaddiHub />} />
+              <Route path="/create-kabaddi-tournament" element={<CreateKabaddiTournament />} />
               <Route path="/testing-guide" element={<TestingGuide />} />
             </Routes>
           </main>
