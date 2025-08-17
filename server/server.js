@@ -10,6 +10,8 @@ const fs = require('fs');
 // Import new models
 const Tournament = require('./models/Tournament');
 const PerformanceTracker = require('./models/PerformanceTracker');
+const KabaddiTournament = require('./models/KabaddiTournament');
+const KabaddiPerformanceTracker = require('./models/KabaddiPerformanceTracker');
 
 const app = express();
 const server = http.createServer(app);
