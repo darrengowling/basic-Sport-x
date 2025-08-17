@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Sport X Cricket Auction Backend API Testing
-Tests all backend endpoints and functionality
+Sport X Backend API Testing - Cricket & Kabaddi
+Tests all backend endpoints and functionality including Kabaddi features
 """
 
 import requests
@@ -16,6 +16,7 @@ class SportXAPITester:
         self.tests_run = 0
         self.tests_passed = 0
         self.session = requests.Session()
+        self.created_kabaddi_tournament_id = None
 
     def log_test(self, name, success, details=""):
         """Log test results"""
