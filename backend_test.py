@@ -610,16 +610,18 @@ class SportXAPITester:
         return success
 
     def run_all_tests(self):
-        """Run all backend tests"""
-        print("🏏 Starting Sport X Backend API Tests")
-        print("=" * 50)
+        """Run all backend tests including Kabaddi"""
+        print("🏏 Starting Sport X Backend API Tests (Cricket & Kabaddi)")
+        print("=" * 60)
         
         # Test server health first
         if not self.test_server_health():
             print("❌ Server is not responding. Stopping tests.")
             return False
             
-        # Test original auction endpoints
+        # Test original cricket auction endpoints
+        print("\n🏏 Testing Cricket Features")
+        print("-" * 30)
         players_success, players_data = self.test_players_endpoint()
         
         if players_success and players_data:
@@ -630,22 +632,47 @@ class SportXAPITester:
         self.test_room_endpoint_404()
         self.test_cors_headers()
         
-        # Test new tournament endpoints
-        print("\n🏆 Testing Tournament Features")
-        print("-" * 30)
+        # Test cricket tournament endpoints
+        print("\n🏆 Testing Cricket Tournament Features")
+        print("-" * 40)
         
         tournaments_success, tournaments_data = self.test_tournaments_endpoint()
         real_tournaments_success, real_tournaments_data = self.test_real_tournaments_endpoint()
         
-        # Test tournament creation and related endpoints
+        # Test cricket tournament creation and related endpoints
         tournament_created, tournament_id = self.test_create_tournament()
         if tournament_created and tournament_id:
             self.test_get_tournament_details(tournament_id)
             self.test_tournament_leaderboard(tournament_id)
             self.test_tournament_chat(tournament_id)
         
+        # Test Kabaddi functionality
+        print("\n🤼 Testing Kabaddi Features")
+        print("-" * 30)
+        
+        # Test kabaddi players endpoint
+        kabaddi_players_success, kabaddi_players_data = self.test_kabaddi_players_endpoint()
+        if kabaddi_players_success and kabaddi_players_data:
+            self.validate_kabaddi_player_data_structure(kabaddi_players_data)
+        
+        # Test real kabaddi tournaments
+        real_kabaddi_tournaments_success, real_kabaddi_tournaments_data = self.test_real_kabaddi_tournaments_endpoint()
+        
+        # Test kabaddi tournaments list
+        kabaddi_tournaments_success, kabaddi_tournaments_data = self.test_kabaddi_tournaments_endpoint()
+        
+        # Test kabaddi tournament creation and related endpoints
+        print("\n🏆 Testing Kabaddi Tournament Features")
+        print("-" * 40)
+        
+        kabaddi_tournament_created, kabaddi_tournament_id = self.test_create_kabaddi_tournament()
+        if kabaddi_tournament_created and kabaddi_tournament_id:
+            self.test_get_kabaddi_tournament_details(kabaddi_tournament_id)
+            self.test_join_kabaddi_tournament(kabaddi_tournament_id)
+            self.test_kabaddi_tournament_leaderboard(kabaddi_tournament_id)
+        
         # Print summary
-        print("\n" + "=" * 50)
+        print("\n" + "=" * 60)
         print(f"📊 Test Summary:")
         print(f"   Tests Run: {self.tests_run}")
         print(f"   Tests Passed: {self.tests_passed}")
