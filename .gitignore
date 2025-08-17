@@ -75,3 +75,4 @@ client/build
 
 # Test files
 test-app.js
+client/node_modules/.cache/default-development/0.pack

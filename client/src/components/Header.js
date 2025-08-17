@@ -154,6 +154,16 @@ const Header = () => {
               Tournaments
             </Link>
             <Link
+              to="/kabaddi-hub"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/kabaddi-hub') 
+                  ? 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-200' 
+                  : 'text-gray-700 hover:text-orange-600 dark:text-gray-300 dark:hover:text-orange-400'
+              }`}
+            >
+              Kabaddi
+            </Link>
+            <Link
               to="/teams"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActive('/teams') 
