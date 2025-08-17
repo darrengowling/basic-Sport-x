@@ -11,7 +11,7 @@ import time
 from datetime import datetime
 
 class SportXAPITester:
-    def __init__(self, base_url="https://8881cd89-f50c-4924-a174-8835f0b84cd2.preview.emergentagent.com"):
+    def __init__(self, base_url="https://player-auction-1.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
