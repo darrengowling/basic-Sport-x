@@ -365,6 +365,250 @@ class SportXAPITester:
             self.log_test("Tournament Chat", False, str(e))
             return False
 
+    # ======================= KABADDI TESTING METHODS =======================
+    
+    def test_kabaddi_players_endpoint(self):
+        """Test /api/kabaddi-players endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/kabaddi-players")
+            success = response.status_code == 200
+            
+            if success:
+                players = response.json()
+                player_count = len(players)
+                has_required_fields = all(
+                    'id' in player and 'name' in player and 'role' in player and 'raidPoints' in player
+                    for player in players[:5]  # Check first 5 players
+                )
+                has_kabaddi_stats = all(
+                    'tacklePoints' in player and 'rating' in player and 'basePrice' in player
+                    for player in players[:5]
+                )
+                details = f"Found {player_count} kabaddi players, Required fields: {has_required_fields}, Kabaddi stats: {has_kabaddi_stats}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Kabaddi Players API Endpoint", success, details)
+            return success, players if success else []
+            
+        except Exception as e:
+            self.log_test("Kabaddi Players API Endpoint", False, str(e))
+            return False, []
+
+    def test_real_kabaddi_tournaments_endpoint(self):
+        """Test /api/real-kabaddi-tournaments endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/real-kabaddi-tournaments")
+            success = response.status_code == 200
+            
+            if success:
+                real_tournaments = response.json()
+                is_array = isinstance(real_tournaments, list)
+                has_required_fields = all(
+                    'id' in t and 'name' in t and 'type' in t and 'sport' in t
+                    for t in real_tournaments[:3]  # Check first 3
+                )
+                has_kabaddi_sport = all(
+                    t.get('sport') == 'kabaddi' for t in real_tournaments
+                )
+                details = f"Found {len(real_tournaments)} real kabaddi tournaments, Required fields: {has_required_fields}, All kabaddi: {has_kabaddi_sport}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Real Kabaddi Tournaments API Endpoint", success, details)
+            return success, real_tournaments if success else []
+            
+        except Exception as e:
+            self.log_test("Real Kabaddi Tournaments API Endpoint", False, str(e))
+            return False, []
+
+    def test_kabaddi_tournaments_endpoint(self):
+        """Test /api/kabaddi-tournaments endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/kabaddi-tournaments")
+            success = response.status_code == 200
+            
+            if success:
+                tournaments = response.json()
+                is_array = isinstance(tournaments, list)
+                details = f"Returned {len(tournaments)} kabaddi tournaments, Is array: {is_array}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Kabaddi Tournaments API Endpoint", success, details)
+            return success, tournaments if success else []
+            
+        except Exception as e:
+            self.log_test("Kabaddi Tournaments API Endpoint", False, str(e))
+            return False, []
+
+    def test_create_kabaddi_tournament(self):
+        """Test kabaddi tournament creation"""
+        try:
+            tournament_data = {
+                "adminId": f"test_kabaddi_admin_{int(time.time())}",
+                "settings": {
+                    "name": "Test Kabaddi Fantasy Tournament",
+                    "realTournament": "pkl-2024",
+                    "entryFee": 10,
+                    "maxParticipants": 8,
+                    "budget": 30000000,
+                    "squadRules": {
+                        "raiders": 4,
+                        "defenders": 4,
+                        "allRounders": 4,
+                        "totalPlayers": 12
+                    },
+                    "auctionSettings": {
+                        "bidIncrement": 25000,
+                        "bidTimeout": 30,
+                        "minimumBid": 50000
+                    },
+                    "auctionDate": "2024-08-25",
+                    "tournamentStart": "2024-09-01",
+                    "tournamentEnd": "2024-10-15"
+                }
+            }
+            
+            response = self.session.post(f"{self.base_url}/api/kabaddi-tournaments", json=tournament_data)
+            success = response.status_code == 200
+            
+            if success:
+                result = response.json()
+                has_tournament = 'tournament' in result and 'success' in result
+                tournament_id = result.get('tournament', {}).get('id')
+                has_kabaddi_sport = result.get('tournament', {}).get('sport') == 'kabaddi'
+                details = f"Kabaddi tournament created: {has_tournament}, ID: {tournament_id}, Sport: kabaddi"
+                self.created_kabaddi_tournament_id = tournament_id
+                self.log_test("Create Kabaddi Tournament", success, details)
+                return success, tournament_id
+            else:
+                details = f"HTTP {response.status_code}"
+                self.log_test("Create Kabaddi Tournament", success, details)
+                return False, None
+            
+        except Exception as e:
+            self.log_test("Create Kabaddi Tournament", False, str(e))
+            return False, None
+
+    def test_get_kabaddi_tournament_details(self, tournament_id):
+        """Test getting kabaddi tournament details"""
+        if not tournament_id:
+            self.log_test("Get Kabaddi Tournament Details", False, "No tournament ID provided")
+            return False
+            
+        try:
+            response = self.session.get(f"{self.base_url}/api/kabaddi-tournaments/{tournament_id}")
+            success = response.status_code == 200
+            
+            if success:
+                tournament = response.json()
+                has_required_fields = all(
+                    field in tournament for field in ['id', 'settings', 'status', 'participants']
+                )
+                has_kabaddi_sport = tournament.get('sport') == 'kabaddi'
+                has_kabaddi_rules = 'squadRules' in tournament.get('settings', {}) and \
+                                  'raiders' in tournament.get('settings', {}).get('squadRules', {})
+                details = f"Kabaddi tournament details retrieved, Required fields: {has_required_fields}, Sport: kabaddi, Kabaddi rules: {has_kabaddi_rules}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Get Kabaddi Tournament Details", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Get Kabaddi Tournament Details", False, str(e))
+            return False
+
+    def test_join_kabaddi_tournament(self, tournament_id):
+        """Test joining a kabaddi tournament"""
+        if not tournament_id:
+            self.log_test("Join Kabaddi Tournament", False, "No tournament ID provided")
+            return False
+            
+        try:
+            join_data = {
+                "userId": f"test_kabaddi_user_{int(time.time())}",
+                "userData": {
+                    "username": "KabaddiTestUser",
+                    "email": "kabaddi.test@example.com"
+                }
+            }
+            
+            response = self.session.post(f"{self.base_url}/api/kabaddi-tournaments/{tournament_id}/join", json=join_data)
+            success = response.status_code == 200
+            
+            if success:
+                result = response.json()
+                has_success = result.get('success', False)
+                has_participant = 'participant' in result
+                has_tournament = 'tournament' in result
+                details = f"Joined kabaddi tournament: {has_success}, Participant data: {has_participant}, Tournament data: {has_tournament}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Join Kabaddi Tournament", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Join Kabaddi Tournament", False, str(e))
+            return False
+
+    def test_kabaddi_tournament_leaderboard(self, tournament_id):
+        """Test kabaddi tournament leaderboard endpoint"""
+        if not tournament_id:
+            self.log_test("Kabaddi Tournament Leaderboard", False, "No tournament ID provided")
+            return False
+            
+        try:
+            response = self.session.get(f"{self.base_url}/api/kabaddi-tournaments/{tournament_id}/leaderboard")
+            success = response.status_code == 200
+            
+            if success:
+                leaderboard = response.json()
+                is_array = isinstance(leaderboard, list)
+                details = f"Kabaddi leaderboard retrieved, Is array: {is_array}, Entries: {len(leaderboard)}"
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Kabaddi Tournament Leaderboard", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Kabaddi Tournament Leaderboard", False, str(e))
+            return False
+
+    def validate_kabaddi_player_data_structure(self, players):
+        """Validate the structure of kabaddi player data"""
+        if not players:
+            return False
+            
+        required_fields = ['id', 'name', 'age', 'country', 'role', 'basePrice', 'rating', 'raidPoints', 'tacklePoints']
+        sample_player = players[0]
+        
+        has_all_fields = all(field in sample_player for field in required_fields)
+        
+        # Check data types
+        valid_types = (
+            isinstance(sample_player.get('id'), int) and
+            isinstance(sample_player.get('name'), str) and
+            isinstance(sample_player.get('age'), int) and
+            isinstance(sample_player.get('rating'), int) and
+            isinstance(sample_player.get('basePrice'), int) and
+            isinstance(sample_player.get('raidPoints'), int) and
+            isinstance(sample_player.get('tacklePoints'), int)
+        )
+        
+        # Check kabaddi role values
+        valid_kabaddi_roles = ['Raider', 'Defender', 'All-rounder']
+        valid_role = sample_player.get('role') in valid_kabaddi_roles
+        
+        success = has_all_fields and valid_types and valid_role
+        details = f"Fields: {has_all_fields}, Types: {valid_types}, Kabaddi Role: {valid_role}"
+        
+        self.log_test("Kabaddi Player Data Structure Validation", success, details)
+        return success
+
     def run_all_tests(self):
         """Run all backend tests"""
         print("🏏 Starting Sport X Backend API Tests")
