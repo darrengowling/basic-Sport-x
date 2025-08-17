@@ -33,11 +33,13 @@ app.use(express.static('public'));
 
 // In-memory storage
 const auctionRooms = new Map();
-const tournaments = new Map(); // New: Tournament storage
+const tournaments = new Map(); // Cricket tournaments
+const kabaddiTournaments = new Map(); // Kabaddi tournaments
 const userSockets = new Map();
 
-// Initialize performance tracker
+// Initialize performance trackers
 const performanceTracker = new PerformanceTracker();
+const kabaddiPerformanceTracker = new KabaddiPerformanceTracker();
 
 // Load players data
 const playersData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/players.json'), 'utf8'));
