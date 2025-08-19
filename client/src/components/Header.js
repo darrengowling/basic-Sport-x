@@ -44,6 +44,26 @@ const Header = () => {
               Tournaments
             </Link>
             <Link
+              to="/create-room"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/create-room') 
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200' 
+                  : 'text-gray-700 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-400'
+              }`}
+            >
+              Create Auction
+            </Link>
+            <Link
+              to="/join-room"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/join-room') 
+                  ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-200' 
+                  : 'text-gray-700 hover:text-purple-600 dark:text-gray-300 dark:hover:text-purple-400'
+              }`}
+            >
+              Join Auction
+            </Link>
+            <Link
               to="/teams"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActive('/teams') 
