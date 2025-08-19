@@ -236,10 +236,10 @@ metadata:
 
 test_plan:
   current_focus:
+    - "Tournament-Specific Player Selection API Endpoint"
     - "Cricket Players API Endpoint"
     - "Cricket Tournament Management"
     - "Cricket AI & Simulation"
-    - "Kabaddi Code Removal Verification"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
