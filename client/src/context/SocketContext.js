@@ -19,12 +19,6 @@ export const SocketProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    // TEMPORARILY DISABLE Socket.io to fix connection issues
-    console.log('Socket.io connection disabled for troubleshooting');
-    setConnected(true); // Set as connected to avoid showing error messages
-    setSocket(null);
-    return;
-    
     // Initialize socket connection
     const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:8001';
     console.log('Connecting to Socket.io server:', serverUrl);
