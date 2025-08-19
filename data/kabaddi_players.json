@@ -1,5 +1,6 @@
 [
   {
+    "_comment": "KABADDI PLAYERS DATA - COMMENTED OUT FOR PRODUCTION - Cricket-focused deployment - Ready to be restored when Kabaddi functionality is needed",
     "id": 1,
     "name": "Pardeep Narwal",
     "age": 27,
