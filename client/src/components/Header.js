@@ -90,20 +90,13 @@ const Header = () => {
               </div>
             )}
 
-            {/* Connection status */}
-            <div className="flex items-center space-x-2">
-              {connected ? (
-                <div className="flex items-center space-x-1 text-green-600 dark:text-green-400">
-                  <Wifi className="w-4 h-4" />
-                  <span className="text-xs hidden sm:inline">Connected</span>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-1 text-red-600 dark:text-red-400">
-                  <WifiOff className="w-4 h-4" />
-                  <span className="text-xs hidden sm:inline">Disconnected</span>
-                </div>
-              )}
-            </div>
+            {/* Connection status - Only show if disconnected to avoid anxiety */}
+            {!connected && (
+              <div className="flex items-center space-x-1 text-red-600 dark:text-red-400">
+                <WifiOff className="w-4 h-4" />
+                <span className="text-xs hidden sm:inline">Connection Lost</span>
+              </div>
+            )}
 
             {/* Theme toggle */}
             <button
