@@ -19,12 +19,18 @@ const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
+    credentials: false
   },
   allowEIO3: true,
-  transports: ['websocket', 'polling'],
+  transports: ['polling', 'websocket'],
   pingTimeout: 60000,
-  pingInterval: 25000
+  pingInterval: 25000,
+  maxHttpBufferSize: 1e6,
+  allowRequest: (req, callback) => {
+    // Allow all requests
+    callback(null, true);
+  }
 });
 
 // Middleware
