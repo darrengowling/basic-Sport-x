@@ -11,17 +11,18 @@ import {
   Target
 } from 'lucide-react';
 
-const PlayerSelection = ({ selectedPlayers, onPlayersChange }) => {
+const PlayerSelection = ({ selectedPlayers, onPlayersChange, tournamentId }) => {
   const [allPlayers, setAllPlayers] = useState([]);
   const [filteredPlayers, setFilteredPlayers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [countryFilter, setCountryFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [tournamentInfo, setTournamentInfo] = useState(null);
 
   useEffect(() => {
     fetchPlayers();
-  }, []);
+  }, [tournamentId]);
 
   useEffect(() => {
     filterPlayers();
