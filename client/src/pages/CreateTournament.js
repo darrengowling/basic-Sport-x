@@ -570,6 +570,7 @@ const CreateTournament = () => {
                   <PlayerSelection
                     selectedPlayers={formData.selectedPlayers}
                     onPlayersChange={handlePlayersChange}
+                    tournamentId={formData.realTournament}
                   />
                 </motion.div>
               )}
