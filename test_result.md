@@ -1,4 +1,16 @@
 backend:
+  - task: "Tournament-Specific Player Selection API Endpoint"
+    implemented: true
+    working: true
+    file: "server/server.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ COMPREHENSIVE TESTING COMPLETED: Tournament-specific player selection endpoints working perfectly. GET /api/tournaments/{tournamentId}/players returns filtered players based on tournament. IPL 2024 returns 50 players, World Cup 2024 returns 27 players, The Hundred 2024 returns 42 players. Invalid tournaments fallback to all 50 players. Response structure includes tournament info, totalPlayers count, filtered players array, and descriptive message. All endpoints tested successfully with proper error handling and data validation."
+
   - task: "Cricket Players API Endpoint"
     implemented: true
     working: true
