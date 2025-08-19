@@ -863,6 +863,11 @@ class SportXAPITester:
             print("❌ Server is not responding. Stopping tests.")
             return False
             
+        # Test tournament-specific player endpoints (NEW FUNCTIONALITY)
+        print("\n🎯 Testing NEW Tournament-Specific Player Selection")
+        print("-" * 55)
+        tournament_players_success = self.run_tournament_player_tests()
+        
         # Test original cricket auction endpoints
         print("\n🏏 Testing Cricket Features")
         print("-" * 30)
