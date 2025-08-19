@@ -1,3 +1,9 @@
+// =====================================================================================
+// KABADDI TOURNAMENT MODEL - COMMENTED OUT FOR PRODUCTION
+// This file contains the complete Kabaddi tournament implementation
+// Ready to be restored when Kabaddi functionality is needed
+// =====================================================================================
+
 const { v4: uuidv4 } = require('uuid');
 
 // Kabaddi Tournament Management System for Sport X
