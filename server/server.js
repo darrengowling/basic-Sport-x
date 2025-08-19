@@ -35,12 +35,14 @@ app.use(express.static('public'));
 // In-memory storage
 const auctionRooms = new Map();
 const tournaments = new Map(); // Cricket tournaments
-const kabaddiTournaments = new Map(); // Kabaddi tournaments
+// KABADDI: Commented out for production - Cricket-focused deployment
+// const kabaddiTournaments = new Map(); // Kabaddi tournaments
 const userSockets = new Map();
 
 // Initialize performance trackers
 const performanceTracker = new PerformanceTracker();
-const kabaddiPerformanceTracker = new KabaddiPerformanceTracker();
+// KABADDI: Commented out for production - Cricket-focused deployment
+// const kabaddiPerformanceTracker = new KabaddiPerformanceTracker();
 
 // Load players data
 const playersData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/players.json'), 'utf8'));
