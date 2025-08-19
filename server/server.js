@@ -17,6 +17,7 @@ const PerformanceTracker = require('./models/PerformanceTracker');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
+  path: '/api/socket.io/', // Use /api/ prefix for ingress routing
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
