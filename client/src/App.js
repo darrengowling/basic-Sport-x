@@ -11,8 +11,6 @@ import Simulation from './pages/Simulation';
 import TournamentHub from './pages/TournamentHub';
 import CreateTournament from './pages/CreateTournament';
 import TestingGuide from './pages/TestingGuide';
-import JoinRoom from './pages/JoinRoom';
-import CreateRoom from './pages/CreateRoom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
