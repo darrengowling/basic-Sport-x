@@ -24,6 +24,7 @@ export const SocketProvider = ({ children }) => {
     console.log('Connecting to Socket.io server:', serverUrl);
     
     const newSocket = io(serverUrl, {
+      path: '/api/socket.io/', // Use /api/ prefix to match backend and ingress routing
       transports: ['polling', 'websocket'], // Try polling first, then upgrade to websocket
       upgrade: true,
       rememberUpgrade: false,
