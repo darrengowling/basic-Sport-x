@@ -603,141 +603,143 @@ app.get('/api/real-tournaments', (req, res) => {
   res.json(realTournaments);
 });
 
-// Get available real-life Kabaddi tournaments
-app.get('/api/real-kabaddi-tournaments', (req, res) => {
-  const realKabaddiTournaments = [
-    { id: 'pkl-2024', name: 'Pro Kabaddi League 2024', type: 'Professional', sport: 'kabaddi' },
-    { id: 'kabaddi-world-cup-2024', name: 'Kabaddi World Cup 2024', type: 'International', sport: 'kabaddi' },
-    { id: 'asian-games-kabaddi-2024', name: 'Asian Games Kabaddi 2024', type: 'Multi-sport', sport: 'kabaddi' },
-    { id: 'masters-kabaddi-2024', name: 'Kabaddi Masters Championship 2024', type: 'Professional', sport: 'kabaddi' },
-    { id: 'junior-kabaddi-2024', name: 'Junior Kabaddi World Championship 2024', type: 'Youth', sport: 'kabaddi' },
-    { id: 'women-kabaddi-2024', name: 'Women\'s Kabaddi League 2024', type: 'Women', sport: 'kabaddi' }
-  ];
-  res.json(realKabaddiTournaments);
-});
-
-// ======================= KABADDI TOURNAMENT API ENDPOINTS =======================
-
-// Get all Kabaddi tournaments
-app.get('/api/kabaddi-tournaments', (req, res) => {
-  const tournamentList = Array.from(kabaddiTournaments.values()).map(t => ({
-    id: t.id,
-    name: t.settings.name,
-    realTournament: t.settings.realTournament,
-    entryFee: t.settings.entryFee,
-    prizePool: t.prizePool,
-    participants: t.participants.size,
-    maxParticipants: t.settings.maxParticipants,
-    status: t.status,
-    createdAt: t.createdAt,
-    sport: 'kabaddi'
-  }));
-  res.json(tournamentList);
-});
-
-// Get Kabaddi tournament details
-app.get('/api/kabaddi-tournaments/:id', (req, res) => {
-  const tournament = kabaddiTournaments.get(req.params.id);
-  if (!tournament) {
-    return res.status(404).json({ error: 'Kabaddi tournament not found' });
-  }
-  res.json(tournament.getState());
-});
-
-// Create Kabaddi tournament
-app.post('/api/kabaddi-tournaments', (req, res) => {
-  try {
-    const { adminId, settings } = req.body;
-    const tournament = new KabaddiTournament(adminId, settings);
-    kabaddiTournaments.set(tournament.id, tournament);
-    kabaddiPerformanceTracker.registerTournament(tournament);
-    res.json({ 
-      success: true, 
-      tournament: tournament.getState(),
-      message: 'Kabaddi tournament created successfully'
-    });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-// Join Kabaddi tournament
-app.post('/api/kabaddi-tournaments/:id/join', (req, res) => {
-  const tournament = kabaddiTournaments.get(req.params.id);
-  if (!tournament) {
-    return res.status(404).json({ error: 'Kabaddi tournament not found' });
-  }
-
-  try {
-    const { userId, userData } = req.body;
-    if (!tournament.canUserJoin(userId)) {
-      return res.status(400).json({ error: 'Cannot join this kabaddi tournament' });
-    }
-
-    const participant = tournament.addParticipant(userId, userData);
-    res.json({ 
-      success: true,
-      participant,
-      tournament: tournament.getState()
-    });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-// Get Kabaddi players
-app.get('/api/kabaddi-players', (req, res) => {
-  try {
-    const kabaddiPlayersPath = path.join(__dirname, '../data/kabaddi_players.json');
-    const kabaddiPlayersData = fs.readFileSync(kabaddiPlayersPath, 'utf8');
-    const kabaddiPlayers = JSON.parse(kabaddiPlayersData);
-    res.json(kabaddiPlayers);
-  } catch (error) {
-    console.error('Error loading kabaddi players:', error);
-    res.status(500).json({ error: 'Failed to load kabaddi players' });
-  }
-});
-
-// Update Kabaddi player performance (admin only)
-app.post('/api/kabaddi-tournaments/:id/performance', (req, res) => {
-  const tournament = kabaddiTournaments.get(req.params.id);
-  if (!tournament) {
-    return res.status(404).json({ error: 'Kabaddi tournament not found' });
-  }
-
-  const { playerId, performance, adminId } = req.body;
-  if (tournament.adminId !== adminId) {
-    return res.status(403).json({ error: 'Not authorized' });
-  }
-
-  tournament.updatePlayerPerformance(playerId, performance);
-  res.json({ 
-    success: true,
-    leaderboard: tournament.leaderboard
-  });
-});
-
-// Get Kabaddi tournament leaderboard
-app.get('/api/kabaddi-tournaments/:id/leaderboard', (req, res) => {
-  const tournament = kabaddiTournaments.get(req.params.id);
-  if (!tournament) {
-    return res.status(404).json({ error: 'Kabaddi tournament not found' });
-  }
-  res.json(tournament.leaderboard);
-});
-
-// Real-time Kabaddi performance update endpoint
-app.post('/api/kabaddi-performance/update', (req, res) => {
-  const { tournamentId, playerId, performance } = req.body;
-  
-  const success = kabaddiPerformanceTracker.updatePlayerPerformance(tournamentId, playerId, performance);
-  
-  if (success) {
-    res.json({ success: true, message: 'Kabaddi performance updated' });
-  } else {
-    res.status(404).json({ error: 'Kabaddi tournament not found' });
-  }
-});
+// ======================= KABADDI API ENDPOINTS - COMMENTED OUT FOR PRODUCTION =======================
+// 
+// // Get available real-life Kabaddi tournaments
+// app.get('/api/real-kabaddi-tournaments', (req, res) => {
+//   const realKabaddiTournaments = [
+//     { id: 'pkl-2024', name: 'Pro Kabaddi League 2024', type: 'Professional', sport: 'kabaddi' },
+//     { id: 'kabaddi-world-cup-2024', name: 'Kabaddi World Cup 2024', type: 'International', sport: 'kabaddi' },
+//     { id: 'asian-games-kabaddi-2024', name: 'Asian Games Kabaddi 2024', type: 'Multi-sport', sport: 'kabaddi' },
+//     { id: 'masters-kabaddi-2024', name: 'Kabaddi Masters Championship 2024', type: 'Professional', sport: 'kabaddi' },
+//     { id: 'junior-kabaddi-2024', name: 'Junior Kabaddi World Championship 2024', type: 'Youth', sport: 'kabaddi' },
+//     { id: 'women-kabaddi-2024', name: 'Women\'s Kabaddi League 2024', type: 'Women', sport: 'kabaddi' }
+//   ];
+//   res.json(realKabaddiTournaments);
+// });
+// 
+// // Get all Kabaddi tournaments
+// app.get('/api/kabaddi-tournaments', (req, res) => {
+//   const tournamentList = Array.from(kabaddiTournaments.values()).map(t => ({
+//     id: t.id,
+//     name: t.settings.name,
+//     realTournament: t.settings.realTournament,
+//     entryFee: t.settings.entryFee,
+//     prizePool: t.prizePool,
+//     participants: t.participants.size,
+//     maxParticipants: t.settings.maxParticipants,
+//     status: t.status,
+//     createdAt: t.createdAt,
+//     sport: 'kabaddi'
+//   }));
+//   res.json(tournamentList);
+// });
+// 
+// // Get Kabaddi tournament details
+// app.get('/api/kabaddi-tournaments/:id', (req, res) => {
+//   const tournament = kabaddiTournaments.get(req.params.id);
+//   if (!tournament) {
+//     return res.status(404).json({ error: 'Kabaddi tournament not found' });
+//   }
+//   res.json(tournament.getState());
+// });
+// 
+// // Create Kabaddi tournament
+// app.post('/api/kabaddi-tournaments', (req, res) => {
+//   try {
+//     const { adminId, settings } = req.body;
+//     const tournament = new KabaddiTournament(adminId, settings);
+//     kabaddiTournaments.set(tournament.id, tournament);
+//     kabaddiPerformanceTracker.registerTournament(tournament);
+//     res.json({ 
+//       success: true, 
+//       tournament: tournament.getState(),
+//       message: 'Kabaddi tournament created successfully'
+//     });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// });
+// 
+// // Join Kabaddi tournament
+// app.post('/api/kabaddi-tournaments/:id/join', (req, res) => {
+//   const tournament = kabaddiTournaments.get(req.params.id);
+//   if (!tournament) {
+//     return res.status(404).json({ error: 'Kabaddi tournament not found' });
+//   }
+// 
+//   try {
+//     const { userId, userData } = req.body;
+//     if (!tournament.canUserJoin(userId)) {
+//       return res.status(400).json({ error: 'Cannot join this kabaddi tournament' });
+//     }
+// 
+//     const participant = tournament.addParticipant(userId, userData);
+//     res.json({ 
+//       success: true,
+//       participant,
+//       tournament: tournament.getState()
+//     });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// });
+// 
+// // Get Kabaddi players
+// app.get('/api/kabaddi-players', (req, res) => {
+//   try {
+//     const kabaddiPlayersPath = path.join(__dirname, '../data/kabaddi_players.json');
+//     const kabaddiPlayersData = fs.readFileSync(kabaddiPlayersPath, 'utf8');
+//     const kabaddiPlayers = JSON.parse(kabaddiPlayersData);
+//     res.json(kabaddiPlayers);
+//   } catch (error) {
+//     console.error('Error loading kabaddi players:', error);
+//     res.status(500).json({ error: 'Failed to load kabaddi players' });
+//   }
+// });
+// 
+// // Update Kabaddi player performance (admin only)
+// app.post('/api/kabaddi-tournaments/:id/performance', (req, res) => {
+//   const tournament = kabaddiTournaments.get(req.params.id);
+//   if (!tournament) {
+//     return res.status(404).json({ error: 'Kabaddi tournament not found' });
+//   }
+// 
+//   const { playerId, performance, adminId } = req.body;
+//   if (tournament.adminId !== adminId) {
+//     return res.status(403).json({ error: 'Not authorized' });
+//   }
+// 
+//   tournament.updatePlayerPerformance(playerId, performance);
+//   res.json({ 
+//     success: true,
+//     leaderboard: tournament.leaderboard
+//   });
+// });
+// 
+// // Get Kabaddi tournament leaderboard
+// app.get('/api/kabaddi-tournaments/:id/leaderboard', (req, res) => {
+//   const tournament = kabaddiTournaments.get(req.params.id);
+//   if (!tournament) {
+//     return res.status(404).json({ error: 'Kabaddi tournament not found' });
+//   }
+//   res.json(tournament.leaderboard);
+// });
+// 
+// // Real-time Kabaddi performance update endpoint
+// app.post('/api/kabaddi-performance/update', (req, res) => {
+//   const { tournamentId, playerId, performance } = req.body;
+//   
+//   const success = kabaddiPerformanceTracker.updatePlayerPerformance(tournamentId, playerId, performance);
+//   
+//   if (success) {
+//     res.json({ success: true, message: 'Kabaddi performance updated' });
+//   } else {
+//     res.status(404).json({ error: 'Kabaddi tournament not found' });
+//   }
+// });
+//
+// ======================= END KABADDI ENDPOINTS =======================
 
 // AI Prediction endpoint
 app.post('/api/predict', async (req, res) => {
