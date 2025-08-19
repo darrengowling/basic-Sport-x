@@ -1,3 +1,9 @@
+// =====================================================================================
+// KABADDI PERFORMANCE TRACKER MODEL - COMMENTED OUT FOR PRODUCTION  
+// This file contains the complete Kabaddi performance tracking implementation
+// Ready to be restored when Kabaddi functionality is needed
+// =====================================================================================
+
 const axios = require('axios');
 
 // Kabaddi Performance Tracking System for Real Kabaddi Data
