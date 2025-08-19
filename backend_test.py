@@ -823,6 +823,36 @@ class SportXAPITester:
         self.log_test("Kabaddi Player Data Structure Validation", success, details)
         return success
 
+    def run_tournament_player_tests(self):
+        """Run tournament-specific player endpoint tests"""
+        print("\n🏆 Testing Tournament-Specific Player Selection")
+        print("-" * 50)
+        
+        # Test IPL 2024 players
+        ipl_success, ipl_data = self.test_tournament_specific_players_ipl_2024()
+        if ipl_success and ipl_data:
+            self.test_tournament_players_response_structure(ipl_data)
+        
+        # Test World Cup 2024 players
+        wc_success, wc_data = self.test_tournament_specific_players_world_cup_2024()
+        if wc_success and wc_data:
+            self.test_tournament_players_response_structure(wc_data)
+        
+        # Test The Hundred 2024 players
+        hundred_success, hundred_data = self.test_tournament_specific_players_the_hundred_2024()
+        if hundred_success and hundred_data:
+            self.test_tournament_players_response_structure(hundred_data)
+        
+        # Test invalid tournament (fallback)
+        invalid_success, invalid_data = self.test_tournament_specific_players_invalid_tournament()
+        if invalid_success and invalid_data:
+            self.test_tournament_players_response_structure(invalid_data)
+        
+        # Test original endpoint still works
+        self.test_original_players_endpoint_unchanged()
+        
+        return all([ipl_success, wc_success, hundred_success, invalid_success])
+
     def run_all_tests(self):
         """Run all backend tests including Kabaddi"""
         print("🏏 Starting Sport X Backend API Tests (Cricket & Kabaddi)")
