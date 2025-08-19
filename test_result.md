@@ -1,5 +1,5 @@
 backend:
-  - task: "Kabaddi Players API Endpoint"
+  - task: "Cricket Players API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -9,9 +9,9 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "GET /api/kabaddi-players endpoint working correctly. Returns 50 kabaddi players with proper structure including kabaddi-specific stats (raidPoints, tacklePoints, successfulRaids, successfulTackles). All required fields present and data types correct."
+          comment: "GET /api/players endpoint working correctly after Kabaddi removal. Returns 50 cricket players with proper structure including cricket-specific roles (Batsman, Bowler, All-rounder, Wicket-Keeper). All required fields present and data types correct."
 
-  - task: "Real Kabaddi Tournaments API Endpoint"
+  - task: "Real Cricket Tournaments API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -21,9 +21,9 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "GET /api/real-kabaddi-tournaments endpoint working correctly. Returns 6 real kabaddi tournaments including Pro Kabaddi League 2024, Kabaddi World Cup 2024, etc. All tournaments correctly marked with sport: 'kabaddi'."
+          comment: "GET /api/real-tournaments endpoint working correctly. Returns 8 real cricket tournaments including IPL 2024, ICC T20 World Cup 2024, etc. All tournaments correctly marked with sport: 'cricket'."
 
-  - task: "Kabaddi Tournaments List API Endpoint"
+  - task: "Cricket Tournaments List API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -33,9 +33,9 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "GET /api/kabaddi-tournaments endpoint working correctly. Returns empty array initially as expected. Endpoint structure matches cricket tournaments but for kabaddi sport."
+          comment: "GET /api/tournaments endpoint working correctly. Returns empty array initially as expected. Endpoint structure for cricket tournaments functioning properly."
 
-  - task: "Create Kabaddi Tournament API Endpoint"
+  - task: "Create Cricket Tournament API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -45,9 +45,9 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "POST /api/kabaddi-tournaments endpoint working correctly. Successfully creates kabaddi tournaments with proper structure including kabaddi-specific squad rules (raiders, defenders, allRounders). Returns tournament with sport: 'kabaddi' and unique ID."
+          comment: "POST /api/tournaments endpoint working correctly. Successfully creates cricket tournaments with proper structure including cricket-specific squad rules (batsmen, bowlers, allRounders, wicketKeepers). Returns tournament with unique ID."
 
-  - task: "Get Kabaddi Tournament Details API Endpoint"
+  - task: "Get Cricket Tournament Details API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -57,9 +57,9 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "GET /api/kabaddi-tournaments/:id endpoint working correctly. Returns complete tournament details including settings, participants, status, and kabaddi-specific squad rules. Proper error handling for invalid IDs (404)."
+          comment: "GET /api/tournaments/:id endpoint working correctly. Returns complete tournament details including settings, participants, status, and cricket-specific squad rules. Proper error handling for invalid IDs (404)."
 
-  - task: "Join Kabaddi Tournament API Endpoint"
+  - task: "Join Cricket Tournament API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -69,9 +69,9 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "POST /api/kabaddi-tournaments/:id/join endpoint working correctly. Successfully adds participants to kabaddi tournaments with proper budget allocation (£30M default for kabaddi). Returns participant and updated tournament data."
+          comment: "POST /api/tournaments/:id/join endpoint working correctly. Successfully adds participants to cricket tournaments with proper budget allocation. Returns participant and updated tournament data."
 
-  - task: "Kabaddi Tournament Leaderboard API Endpoint"
+  - task: "Cricket Tournament Leaderboard API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -81,21 +81,33 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "GET /api/kabaddi-tournaments/:id/leaderboard endpoint working correctly. Returns empty array initially as expected. Ready for kabaddi-specific scoring system integration."
+          comment: "GET /api/tournaments/:id/leaderboard endpoint working correctly. Returns empty array initially as expected. Ready for cricket-specific scoring system integration."
 
-  - task: "Kabaddi Data Structure Validation"
+  - task: "Cricket AI Prediction API Endpoint"
     implemented: true
     working: true
-    file: "data/kabaddi_players.json"
+    file: "server/server.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
         - working: true
           agent: "testing"
-          comment: "Kabaddi player data structure validated successfully. All players have required fields including kabaddi-specific stats. Proper role validation (Raider, Defender, All-rounder). Data types correct and frontend-compatible."
+          comment: "POST /api/predict endpoint working correctly. Accepts cricket team data and match type. Endpoint exists and handles requests properly (AI service requires API key for full functionality)."
 
-  - task: "Error Handling for Kabaddi Endpoints"
+  - task: "Cricket Tournament Simulation API Endpoint"
+    implemented: true
+    working: true
+    file: "server/server.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "POST /api/simulate-tournament endpoint working correctly. Accepts cricket teams and tournament type. Endpoint exists and handles requests properly (AI service requires API key for full functionality)."
+
+  - task: "Cricket Performance Update API Endpoint"
     implemented: true
     working: true
     file: "server/server.js"
@@ -105,7 +117,31 @@ backend:
     status_history:
         - working: true
           agent: "testing"
-          comment: "Error handling working correctly for kabaddi endpoints. Returns 404 for invalid tournament IDs, proper error responses for non-existent tournaments. Validation in place for tournament operations."
+          comment: "POST /api/performance/update endpoint working correctly. Successfully processes cricket performance updates for tournaments and players. Returns proper success responses."
+
+  - task: "Kabaddi Code Removal Verification"
+    implemented: true
+    working: true
+    file: "server/server.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Kabaddi endpoints successfully removed from production. All Kabaddi API endpoints (/api/kabaddi-players, /api/real-kabaddi-tournaments, /api/kabaddi-tournaments) now return 404 as expected. Server restart required to apply changes."
+
+  - task: "Cricket Data Structure Validation"
+    implemented: true
+    working: true
+    file: "data/players.json"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Cricket player data structure validated successfully. All players have required fields including cricket-specific stats. Proper role validation (Batsman, Bowler, All-rounder, Wicket-Keeper). Data types correct and frontend-compatible."
 
 frontend:
   - task: "Kabaddi Navigation & Hub Testing"
