@@ -11,8 +11,6 @@ import Simulation from './pages/Simulation';
 import TournamentHub from './pages/TournamentHub';
 import CreateTournament from './pages/CreateTournament';
 import TestingGuide from './pages/TestingGuide';
-import KabaddiHub from './pages/KabaddiHub';
-import CreateKabaddiTournament from './pages/CreateKabaddiTournament';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
