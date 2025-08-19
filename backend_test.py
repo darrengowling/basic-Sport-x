@@ -578,7 +578,221 @@ class SportXAPITester:
             self.log_test("Kabaddi Tournament Leaderboard", False, str(e))
             return False
 
-    def validate_kabaddi_player_data_structure(self, players):
+    def test_tournament_specific_players_ipl_2024(self):
+        """Test /api/tournaments/ipl-2024/players endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments/ipl-2024/players")
+            success = response.status_code == 200
+            
+            if success:
+                data = response.json()
+                has_tournament_info = 'tournament' in data and data['tournament'] == 'ipl-2024'
+                has_total_players = 'totalPlayers' in data
+                has_players_array = 'players' in data and isinstance(data['players'], list)
+                has_message = 'message' in data
+                
+                player_count = data.get('totalPlayers', 0)
+                expected_count_range = player_count >= 70 and player_count <= 90  # Around 80 players expected
+                
+                # Check if players have required fields
+                players = data.get('players', [])
+                has_required_fields = all(
+                    'id' in player and 'name' in player and 'role' in player and 'country' in player
+                    for player in players[:5]  # Check first 5 players
+                ) if players else False
+                
+                details = f"Tournament: {data.get('tournament')}, Players: {player_count}, Expected range: 70-90, Required fields: {has_required_fields}"
+                success = has_tournament_info and has_total_players and has_players_array and has_message and expected_count_range and has_required_fields
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Tournament Specific Players - IPL 2024", success, details)
+            return success, data if success else {}
+            
+        except Exception as e:
+            self.log_test("Tournament Specific Players - IPL 2024", False, str(e))
+            return False, {}
+
+    def test_tournament_specific_players_world_cup_2024(self):
+        """Test /api/tournaments/world-cup-2024/players endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments/world-cup-2024/players")
+            success = response.status_code == 200
+            
+            if success:
+                data = response.json()
+                has_tournament_info = 'tournament' in data and data['tournament'] == 'world-cup-2024'
+                has_total_players = 'totalPlayers' in data
+                has_players_array = 'players' in data and isinstance(data['players'], list)
+                has_message = 'message' in data
+                
+                player_count = data.get('totalPlayers', 0)
+                expected_count_range = player_count >= 70 and player_count <= 90  # Around 80 players expected
+                
+                # Check if players have required fields
+                players = data.get('players', [])
+                has_required_fields = all(
+                    'id' in player and 'name' in player and 'role' in player and 'country' in player
+                    for player in players[:5]  # Check first 5 players
+                ) if players else False
+                
+                details = f"Tournament: {data.get('tournament')}, Players: {player_count}, Expected range: 70-90, Required fields: {has_required_fields}"
+                success = has_tournament_info and has_total_players and has_players_array and has_message and expected_count_range and has_required_fields
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Tournament Specific Players - World Cup 2024", success, details)
+            return success, data if success else {}
+            
+        except Exception as e:
+            self.log_test("Tournament Specific Players - World Cup 2024", False, str(e))
+            return False, {}
+
+    def test_tournament_specific_players_the_hundred_2024(self):
+        """Test /api/tournaments/the-hundred-2024/players endpoint"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments/the-hundred-2024/players")
+            success = response.status_code == 200
+            
+            if success:
+                data = response.json()
+                has_tournament_info = 'tournament' in data and data['tournament'] == 'the-hundred-2024'
+                has_total_players = 'totalPlayers' in data
+                has_players_array = 'players' in data and isinstance(data['players'], list)
+                has_message = 'message' in data
+                
+                player_count = data.get('totalPlayers', 0)
+                expected_count_range = player_count >= 50 and player_count <= 70  # Around 60 players expected
+                
+                # Check if players have required fields
+                players = data.get('players', [])
+                has_required_fields = all(
+                    'id' in player and 'name' in player and 'role' in player and 'country' in player
+                    for player in players[:5]  # Check first 5 players
+                ) if players else False
+                
+                details = f"Tournament: {data.get('tournament')}, Players: {player_count}, Expected range: 50-70, Required fields: {has_required_fields}"
+                success = has_tournament_info and has_total_players and has_players_array and has_message and expected_count_range and has_required_fields
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Tournament Specific Players - The Hundred 2024", success, details)
+            return success, data if success else {}
+            
+        except Exception as e:
+            self.log_test("Tournament Specific Players - The Hundred 2024", False, str(e))
+            return False, {}
+
+    def test_tournament_specific_players_invalid_tournament(self):
+        """Test /api/tournaments/invalid-tournament/players endpoint - should fallback to all players"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/tournaments/invalid-tournament/players")
+            success = response.status_code == 200
+            
+            if success:
+                # For invalid tournament, it should return all players (fallback behavior)
+                data = response.json()
+                
+                # Check if it's the fallback response (all players)
+                is_fallback = isinstance(data, list)  # All players endpoint returns array directly
+                
+                if is_fallback:
+                    player_count = len(data)
+                    expected_fallback_count = player_count >= 150  # Should be all players (150+)
+                    
+                    # Check if players have required fields
+                    has_required_fields = all(
+                        'id' in player and 'name' in player and 'role' in player
+                        for player in data[:5]  # Check first 5 players
+                    ) if data else False
+                    
+                    details = f"Fallback to all players: {is_fallback}, Total players: {player_count}, Expected 150+: {expected_fallback_count}, Required fields: {has_required_fields}"
+                    success = is_fallback and expected_fallback_count and has_required_fields
+                else:
+                    # If it returns tournament-specific format, check that
+                    has_tournament_info = 'tournament' in data
+                    player_count = data.get('totalPlayers', len(data.get('players', [])))
+                    details = f"Tournament format returned, Players: {player_count}"
+                    success = True  # Any valid response is acceptable for invalid tournament
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Tournament Specific Players - Invalid Tournament (Fallback)", success, details)
+            return success, data if success else {}
+            
+        except Exception as e:
+            self.log_test("Tournament Specific Players - Invalid Tournament (Fallback)", False, str(e))
+            return False, {}
+
+    def test_tournament_players_response_structure(self, tournament_data):
+        """Validate the response structure of tournament-specific player endpoints"""
+        if not tournament_data:
+            self.log_test("Tournament Players Response Structure", False, "No tournament data provided")
+            return False
+            
+        try:
+            # Check if it's the expected tournament response format
+            if isinstance(tournament_data, dict) and 'tournament' in tournament_data:
+                required_fields = ['tournament', 'totalPlayers', 'players', 'message']
+                has_all_fields = all(field in tournament_data for field in required_fields)
+                
+                # Check players array structure
+                players = tournament_data.get('players', [])
+                if players:
+                    sample_player = players[0]
+                    player_required_fields = ['id', 'name', 'role', 'country', 'basePrice', 'rating']
+                    has_player_fields = all(field in sample_player for field in player_required_fields)
+                    
+                    # Check cricket-specific roles
+                    valid_roles = ['Batsman', 'Bowler', 'All-rounder', 'Wicket-Keeper']
+                    has_valid_role = sample_player.get('role') in valid_roles
+                else:
+                    has_player_fields = False
+                    has_valid_role = False
+                
+                success = has_all_fields and has_player_fields and has_valid_role
+                details = f"Response fields: {has_all_fields}, Player fields: {has_player_fields}, Valid role: {has_valid_role}"
+            else:
+                # Fallback case - array of players
+                success = isinstance(tournament_data, list) and len(tournament_data) > 0
+                details = f"Fallback response (array): {success}, Count: {len(tournament_data) if isinstance(tournament_data, list) else 0}"
+                
+            self.log_test("Tournament Players Response Structure", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Tournament Players Response Structure", False, str(e))
+            return False
+
+    def test_original_players_endpoint_unchanged(self):
+        """Test that original /api/players endpoint still works unchanged"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/players")
+            success = response.status_code == 200
+            
+            if success:
+                players = response.json()
+                is_array = isinstance(players, list)
+                player_count = len(players) if is_array else 0
+                expected_count = player_count >= 150  # Should have all players
+                
+                # Check if players have required fields
+                has_required_fields = all(
+                    'id' in player and 'name' in player and 'role' in player
+                    for player in players[:5]  # Check first 5 players
+                ) if players else False
+                
+                details = f"Is array: {is_array}, Total players: {player_count}, Expected 150+: {expected_count}, Required fields: {has_required_fields}"
+                success = is_array and expected_count and has_required_fields
+            else:
+                details = f"HTTP {response.status_code}"
+                
+            self.log_test("Original Players Endpoint Unchanged", success, details)
+            return success
+            
+        except Exception as e:
+            self.log_test("Original Players Endpoint Unchanged", False, str(e))
+            return False
         """Validate the structure of kabaddi player data"""
         if not players:
             return False
