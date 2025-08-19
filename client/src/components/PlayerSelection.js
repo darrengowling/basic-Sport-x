@@ -30,10 +30,42 @@ const PlayerSelection = ({ selectedPlayers, onPlayersChange, tournamentId }) => 
 
   const fetchPlayers = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL || 'http://localhost:8001'}/api/players`);
-      setAllPlayers(response.data);
+      let response;
+      let data;
+      
+      if (tournamentId) {
+        // Fetch tournament-specific players
+        response = await axios.get(`${process.env.REACT_APP_SERVER_URL || 'http://localhost:8001'}/api/tournaments/${tournamentId}/players`);
+        data = response.data;
+        
+        if (data.players) {
+          setAllPlayers(data.players);
+          setTournamentInfo({
+            tournament: data.tournament,
+            totalPlayers: data.totalPlayers,
+            message: data.message
+          });
+        } else {
+          // Fallback to all players
+          setAllPlayers(data);
+          setTournamentInfo(null);
+        }
+      } else {
+        // Fetch all players
+        response = await axios.get(`${process.env.REACT_APP_SERVER_URL || 'http://localhost:8001'}/api/players`);
+        setAllPlayers(response.data);
+        setTournamentInfo(null);
+      }
     } catch (error) {
       console.error('Error fetching players:', error);
+      // Fallback to all players if tournament-specific fetch fails
+      try {
+        const fallbackResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL || 'http://localhost:8001'}/api/players`);
+        setAllPlayers(fallbackResponse.data);
+        setTournamentInfo(null);
+      } catch (fallbackError) {
+        console.error('Error fetching fallback players:', fallbackError);
+      }
     } finally {
       setLoading(false);
     }
