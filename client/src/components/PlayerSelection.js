@@ -165,7 +165,11 @@ const PlayerSelection = ({ selectedPlayers, onPlayersChange, tournamentId }) => 
             <span>Select Players for Auction</span>
           </h3>
           <p className="text-gray-600 dark:text-gray-300 mt-1">
-            Choose which players will be available in this tournament auction
+            {tournamentInfo ? (
+              <>Choose players from <span className="font-semibold text-blue-600 dark:text-blue-400">{tournamentInfo.message}</span></>
+            ) : (
+              'Choose which players will be available in this tournament auction'
+            )}
           </p>
         </div>
         <div className="text-right">
@@ -173,6 +177,11 @@ const PlayerSelection = ({ selectedPlayers, onPlayersChange, tournamentId }) => 
           <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {selectedPlayers.length} / {allPlayers.length}
           </div>
+          {tournamentInfo && (
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {tournamentInfo.totalPlayers} tournament players available
+            </div>
+          )}
         </div>
       </div>
 
