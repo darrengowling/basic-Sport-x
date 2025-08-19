@@ -20,7 +20,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Initialize socket connection
-    const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:5000';
+    const serverUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:8001';
     console.log('Connecting to Socket.io server:', serverUrl);
     
     const newSocket = io(serverUrl, {
@@ -31,29 +31,42 @@ export const SocketProvider = ({ children }) => {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      timeout: 10000,
-      autoConnect: true
+      timeout: 20000, // Increased timeout
+      autoConnect: true,
+      withCredentials: false, // Important for CORS
+      forceBase64: false
     });
 
     setSocket(newSocket);
 
     // Connection event handlers
     newSocket.on('connect', () => {
-      console.log('Connected to server');
+      console.log('Connected to server successfully');
       setConnected(true);
-      toast.success('Connected to server');
+      // Remove the toast notification to avoid user anxiety
     });
 
-    newSocket.on('disconnect', () => {
-      console.log('Disconnected from server');
+    newSocket.on('disconnect', (reason) => {
+      console.log('Disconnected from server, reason:', reason);
       setConnected(false);
-      toast.error('Disconnected from server');
+      toast.error('Connection lost - Attempting to reconnect...');
     });
 
     newSocket.on('connect_error', (error) => {
       console.error('Connection error:', error);
       setConnected(false);
       toast.error('Failed to connect to server - Real-time features disabled');
+    });
+
+    newSocket.on('reconnect', (attemptNumber) => {
+      console.log('Reconnected to server after', attemptNumber, 'attempts');
+      setConnected(true);
+      toast.success('Reconnected to server');
+    });
+
+    newSocket.on('reconnect_error', () => {
+      console.log('Reconnection failed');
+      setConnected(false);
     });
 
     // Room event handlers
