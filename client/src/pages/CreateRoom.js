@@ -100,10 +100,24 @@ const CreateRoom = () => {
           )}
           <button
             onClick={handleCreateRoom}
-            className="w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            disabled={loading}
+            className={`w-full flex items-center justify-center space-x-2 font-semibold py-2 px-4 rounded-lg transition duration-200 ${
+              loading 
+                ? 'bg-gray-400 cursor-not-allowed text-gray-200' 
+                : 'bg-blue-600 hover:bg-blue-700 text-white'
+            }`}
           >
-            <span>Create Room</span>
-            <ArrowRight className="w-5 h-5" />
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                <span>Creating Room...</span>
+              </>
+            ) : (
+              <>
+                <span>Create Room</span>
+                <ArrowRight className="w-5 h-5" />
+              </>
+            )}
           </button>
         </div>
       </div>
