@@ -8,24 +8,58 @@ const CreateRoom = () => {
   const [roomName, setRoomName] = useState('');
   const [mode, setMode] = useState('standard');
   const [budget, setBudget] = useState(10000000);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { createRoom } = useSocket();
+  const { createRoom, socket } = useSocket();
 
-  const handleCreateRoom = () => {
+  const handleCreateRoom = async () => {
     if (!roomName) {
       toast.error('Please enter a room name');
       return;
     }
 
-    const settings = {
-      name: roomName,
-      mode,
-      budget,
-      bidTimeout: 30,
-    };
+    setLoading(true);
 
-    createRoom(settings);
-    navigate(`/room/${roomName}`);
+    try {
+      const settings = {
+        name: roomName,
+        mode,
+        budget,
+        bidTimeout: 30,
+      };
+
+      // Listen for room-created event to get the actual room ID
+      const createPromise = new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('Room creation timeout'));
+        }, 10000);
+
+        socket.once('room-created', (data) => {
+          clearTimeout(timeout);
+          resolve(data);
+        });
+
+        socket.once('error', (error) => {
+          clearTimeout(timeout);
+          reject(error);
+        });
+      });
+
+      // Create the room
+      createRoom(settings);
+      
+      // Wait for server response with actual room ID
+      const { roomId } = await createPromise;
+      
+      // Navigate to the room using the server-generated room ID
+      navigate(`/room/${roomId}`);
+      
+    } catch (error) {
+      console.error('Failed to create room:', error);
+      toast.error('Failed to create room. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
