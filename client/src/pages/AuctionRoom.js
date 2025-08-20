@@ -39,12 +39,7 @@ const AuctionRoom = () => {
             Share the room code <span className="font-bold text-blue-600 dark:text-blue-400">{roomId}</span> to invite others.
           </p>
           <div className="mt-8">
-            <h3 className="text-xl font-semibold mb-2">Teams in Room</h3>
-            {teams.length > 0 ? (
-              <TeamList teams={teams} budget={settings.budget} />
-            ) : (
-              <p>No teams have joined yet.</p>
-            )}
+            <TeamList teams={teams} budget={settings.budget} />
           </div>
           <div className="mt-8">
             <AuctionControls status={status} />
